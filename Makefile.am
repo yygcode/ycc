@@ -1,0 +1,5 @@
+SUBDIRS = src man
+
+ACLOCAL_AMFLAGS = -I m4
+
+EXTRA_DIST = AUTHORS BUGS ChangeLog COPYING Makefile.rules NEWS README
