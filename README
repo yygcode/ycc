@@ -1,0 +1,10 @@
+* ycc
+	A universal C-language library
+
+* components
+	algorithms
+	net
+
+* algorithms
+	binary-search-trees: AVL, red-black, splay, treap
+	exact-string-match: KMP, bm, bmh, bms

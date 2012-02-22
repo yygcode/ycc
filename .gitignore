@@ -1,0 +1,10 @@
+# autotools intermediary files
+*.in
+*.m4
+*.swp
+configure
+INSTALL
+autom4te.cache/
+build/
+build-aux/
+m4/
