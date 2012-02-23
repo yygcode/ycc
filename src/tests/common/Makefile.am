@@ -1,13 +1,12 @@
 include $(top_srcdir)/Makefile.rules
-test_LDADD = ../../libycc.la
+include $(top_srcdir)/src/tests/Makefile.rules
 
-noinst_PROGRAMS = test-debug test-ndebug
+tests_common_dir = $(tests_dir)/common
+
+noinst_PROGRAMS = test-debug test-ndebug test-log
 
 test_ndebug_SOURCES =
-
-test-ndebug.o: $(top_srcdir)/src/tests/common/test-debug.c
+test_ndebug_LDADD = test-ndebug.o
+test-ndebug.o: $(tests_common_dir)/test-debug.c $(top_builddir)/config.h
 	$(COMPILE) -DYCC_TEST_NDEBUG -o test-ndebug.o -c \
-		$(top_srcdir)/src/tests/common/test-debug.c
-
-test_debug_LDADD = $(test_LDADD)
-test_ndebug_LDADD = test-ndebug.o $(test_LDADD)
+		$(tests_common_dir)/test-debug.c
