@@ -31,6 +31,7 @@
 #  endif
 #endif
 
+#include <config-os.h>
 #include <ycc/common/debug.h>
 
 void test_debug()
@@ -50,6 +51,7 @@ void test_debug()
 		exit(1);
 	}
 
+	DBG_PRINTF("debug print");
 	OUT_PRINTF("success");
 }
 
@@ -70,6 +72,7 @@ void test_ndebug()
 		exit(1);
 	}
 
+	DBG_PRINTF("debug print");
 	OUT_PRINTF("success");
 }
 

@@ -1,0 +1,3 @@
+AM_LDFLAGS = $(top_builddir)/src/libycc.la
+
+tests_dir = $(top_srcdir)/src/tests
