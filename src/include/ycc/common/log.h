@@ -56,34 +56,66 @@ __BEGIN_DECLS
  * level: when LOG_WRITE/LOG_VWRITE's level is greater than this,
  *	  messages would be discarded.
  */
-#define LOG_OPEN(path, console, level)	\
-		_log_open_glog((path), (console), (level))
-#define LOG_SET(console, level)		\
-		log_set(_glog_info, (console), (level))
-#define LOG_GET(pconsole, plevel)	\
-		log_get(_glog_info, (pconsole), (plevel))
-#define LOG_WRITE(level, fmt, ...)	\
-		log_write(_glog_info, (level), (fmt), ## __VA_ARGS__)
-#define LOG_VWRITE(level, fmt, ap)	\
-		log_vwrite(_glog_info, (level), (fmt), (ap))
-#define LOG_FLUSH()			\
-		log_flush(_glog_info)
-#define LOG_CLOSE()			\
-		log_close(_glog_info)
+#define GLOG_OPEN(path, console, level)	\
+		(_log_open_glog((path), (console), (level)))
+#define GLOG_SET(console, level)		\
+		log_set(_ycc_glog, (console), (level))
+#define GLOG_GET(pconsole, plevel)	\
+		log_get(_ycc_glog, (pconsole), (plevel))
+#define GLOG_DEBUG(fmt, ...)		\
+		log_write(_ycc_glog, LOG_DEBUG, (fmt), ## __VA_ARGS__)
+#define GLOG_INFO(fmt, ...)		\
+		log_write(_ycc_glog, LOG_INFO, (fmt), ## __VA_ARGS__)
+#define GLOG_NOTICE(fmt, ...)		\
+		log_write(_ycc_glog, LOG_NOTICE, (fmt), ## __VA_ARGS__)
+#define GLOG_WARN(fmt, ...)		\
+		log_write(_ycc_glog, LOG_WARNING, (fmt), ## __VA_ARGS__)
+#define GLOG_ERR(fmt, ...)		\
+		log_write(_ycc_glog, LOG_ERR, (fmt), ## __VA_ARGS__)
+#define GLOG_CRIT(fmt, ...)		\
+		log_write(_ycc_glog, LOG_CRIT, (fmt), ## __VA_ARGS__)
+#define GLOG_ALERT(fmt, ...)		\
+		log_write(_ycc_glog, LOG_ALERT, (fmt), ## __VA_ARGS__)
+#define GLOG_EMERG(fmt, ...)		\
+		log_write(_ycc_glog, LOG_EMERG, (fmt), ## __VA_ARGS__)
+#define GLOG_WRITE(level, fmt, ...)	\
+		log_write(_ycc_glog, (level), (fmt), ## __VA_ARGS__)
+#define GLOG_VWRITE(level, fmt, ap)	\
+		log_vwrite(_ycc_glog, (level), (fmt), (ap))
+#define GLOG_FLUSH()			\
+		log_flush(_ycc_glog)
+#define GLOG_CLOSE()			\
+		log_close(_ycc_glog)
 
+#define OUT_SET(console, level)		\
+		log_set(_ycc_gout, (console), (level))
+#define OUT_GET(pconsole, plevel)		\
+		log_get(_ycc_gout, (pconsole), (plevel))
+#define OUT_DEBUG(fmt, ...)		\
+		log_write(_ycc_gout, LOG_DEBUG, (fmt), ## __VA_ARGS__)
+#define OUT_INFO(fmt, ...)		\
+		log_write(_ycc_gout, LOG_INFO, (fmt), ## __VA_ARGS__)
+#define OUT_NOTICE(fmt, ...)		\
+		log_write(_ycc_gout, LOG_NOTICE, (fmt), ## __VA_ARGS__)
+#define OUT_WARN(fmt, ...)		\
+		log_write(_ycc_gout, LOG_WARNING, (fmt), ## __VA_ARGS__)
+#define OUT_ERR(fmt, ...)		\
+		log_write(_ycc_gout, LOG_ERR, (fmt), ## __VA_ARGS__)
+#define OUT_CRIT(fmt, ...)		\
+		log_write(_ycc_gout, LOG_CRIT, (fmt), ## __VA_ARGS__)
+#define OUT_ALERT(fmt, ...)		\
+		log_write(_ycc_gout, LOG_ALERT, (fmt), ## __VA_ARGS__)
+#define OUT_EMERG(fmt, ...)		\
+		log_write(_ycc_gout, LOG_EMERG, (fmt), ## __VA_ARGS__)
 
-/* carefull !
- * you really need multi logs in an application ?
- * otherwise use above macros
- */
+/* Do you really need multi logs in an application ? over-design? */
 struct log_info;
-const struct log_info *log_open(const char *path, int console, int level);
-int log_set(const struct log_info *log, int console, unsigned int level);
+struct log_info *log_open(const char *path, int console, int level);
+int log_set(struct log_info *log, int console, unsigned int level);
 int log_get(const struct log_info *log, int *console, unsigned int *level);
-int log_vwrite(const struct log_info *log,
-	       int level, const char *fmt, va_list ap);
+int log_vwrite(struct log_info *log, int level, const char *fmt, va_list ap);
 static inline int
-log_write(const struct log_info *log, int level, const char *fmt, ...)
+log_write(struct log_info *log, int level, const char *fmt, ...)
 {
 	int i;
 	va_list ap;
@@ -95,15 +127,17 @@ log_write(const struct log_info *log, int level, const char *fmt, ...)
 	return i;
 }
 int log_flush(const struct log_info *log);
-int log_close(const struct log_info *log);
+int log_close(struct log_info *log);
 
 /* do not try to change the variable */
-extern const struct log_info *_glog_info;
+extern struct log_info *_ycc_glog;
+extern struct log_info *_ycc_gout;
 static inline int _log_open_glog(const char *path, int console, int level)
 {
-	log_close(_glog_info);
-	_glog_info = log_open(path, console, level);
-	if (_glog_info)
+	if (_ycc_glog)
+		log_close(_ycc_glog);
+	_ycc_glog = log_open(path, console, level);
+	if (_ycc_glog)
 		return 0;
 
 	return -1;

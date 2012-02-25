@@ -25,22 +25,22 @@
 
 int main()
 {
-	if (LOG_OPEN("/tmp/tests/common/test-log.log", 1, LOG_DEBUG)) {
+	if (GLOG_OPEN("/tmp/tests/common/test-log.log", 1, LOG_DEBUG)) {
 		OUT_PERROR("LOG_OPEN failed");
 		return 1;
 	}
 
-	LOG_WRITE(LOG_DEBUG, "This is first log, write by %s", "yanyg");
-	LOG_WRITE(LOG_INFO, "This is first log, write by %s", "yanyg");
-	LOG_WRITE(LOG_NOTICE, "This is first log, write by %s", "yanyg");
-	LOG_WRITE(LOG_WARNING, "This is first log, write by %s", "yanyg");
-	LOG_WRITE(LOG_ERR, "This is first log, write by %s", "yanyg");
-	LOG_WRITE(LOG_CRIT, "This is first log, write by %s", "yanyg");
-	LOG_WRITE(LOG_ALERT, "This is first log, write by %s", "yanyg");
-	LOG_WRITE(LOG_EMERG, "This is first log, write by %s", "yanyg");
-	LOG_WRITE(10, "This is first log, write by %s", "yanyg");
+	GLOG_WRITE(LOG_DEBUG, "This is first log, write by %s", "yanyg");
+	GLOG_WRITE(LOG_INFO, "This is first log, write by %s", "yanyg");
+	GLOG_WRITE(LOG_NOTICE, "This is first log, write by %s", "yanyg");
+	GLOG_WRITE(LOG_WARNING, "This is first log, write by %s", "yanyg");
+	GLOG_WRITE(LOG_ERR, "This is first log, write by %s", "yanyg");
+	GLOG_WRITE(LOG_CRIT, "This is first log, write by %s", "yanyg");
+	GLOG_WRITE(LOG_ALERT, "This is first log, write by %s", "yanyg");
+	GLOG_WRITE(LOG_EMERG, "This is first log, write by %s", "yanyg");
+	GLOG_WRITE(10, "This is first log, write by %s", "yanyg");
 
-	const struct log_info *log;
+	struct log_info *log;
 	
 	log = log_open("/tmp/tests/common/test-yyg.log", 0, LOG_NOTICE);
 	if (!log) {
