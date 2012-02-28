@@ -28,7 +28,7 @@
 
 #include <ycc/common/debug.h>
 
-static bool bstamp = true;
+static bool bstamp = false;
 
 void set_dbgstamp(bool stamp)
 {
