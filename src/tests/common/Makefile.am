@@ -3,7 +3,7 @@ include $(top_srcdir)/src/tests/Makefile.rules
 
 tests_common_dir = $(tests_dir)/common
 
-noinst_PROGRAMS = test-debug test-ndebug test-log
+noinst_PROGRAMS = test-debug test-ndebug test-log test-conf test-unistd
 
 test_ndebug_SOURCES =
 test_ndebug_LDADD = test-ndebug.o
