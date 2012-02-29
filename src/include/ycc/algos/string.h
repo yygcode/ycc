@@ -1,7 +1,7 @@
 /*
  * string.h -- Exact String Matching
  *
- * Copyright (C) 2012-2013 yanyg (cppgp@qq.com)
+ * Copyright (C) 2012-2013 yanyg (yygcode@gmail.com, cppgp@qq.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,6 +49,4 @@ char *strbm_find(const char *haystack, const char *needle,
 
 __END_DECLS
 
-#endif
-
-/* eof */
+#endif /* __YCC_ALGOS_STRING_H_ */
