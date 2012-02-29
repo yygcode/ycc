@@ -57,5 +57,8 @@ AC_CONFIG_FILES([
                  src/tests/Makefile
                  src/tests/common/Makefile
                  src/tests/algos/Makefile
+                 src/tools/Makefile
+                 src/tools/common/Makefile
+                 src/tools/algos/Makefile
 		 ])
 AC_OUTPUT
