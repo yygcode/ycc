@@ -30,6 +30,8 @@
 #include <stddef.h>
 #include <stdbool.h>
 
+#include <config-os.h>
+
 #include <ycc/algos/bstree-link.h>
 
 __BEGIN_DECLS
