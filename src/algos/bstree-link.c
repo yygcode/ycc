@@ -1,7 +1,7 @@
 /*
  * bstree-link.c -- Binary-Search-Trees Common Routines
  *
- * Copyright (C) 2012-2013 yanyg (cppgp@qq.com)
+ * Copyright (C) 2012-2013 yanyg (yygcode@gmail.com, cppgp@qq.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 
 #include <assert.h>
 #include <stddef.h>
+
+#include <config-os.h>
 
 #include <ycc/algos/bstree-link.h>
 

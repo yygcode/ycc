@@ -1,7 +1,7 @@
 /*
  * avltree.c -- Self-balancing Binary Search Trees
  *
- * Copyright (C) 2012-2013 yanyg (cppgp@qq.com)
+ * Copyright (C) 2012-2013 yanyg (yygcode@gmail.com, cppgp@qq.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
  */
 
 #include <assert.h>
+
+#include <config-os.h>
 
 #include <ycc/algos/avltree.h>
 
