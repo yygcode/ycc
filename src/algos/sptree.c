@@ -1,7 +1,7 @@
 /*
  * sptree.c -- Splay Trees
  *
- * Copyright (C) 2012-2013 yanyg (cppgp@qq.com)
+ * Copyright (C) 2012-2013 yanyg (yygcode@gmail.com, cppgp@qq.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
  * along with this program; see the file COPYING, if not see
  * <http://www.gnu.org/licenses/>.
  */
+
+#include <config-os.h>
 
 #include <ycc/algos/sptree.h>
 

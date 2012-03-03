@@ -26,4 +26,6 @@
 
 /* I can't get the paper from web, delay the work ... */
 
+#include <config-os.h>
+
 /* eof */
