@@ -50,6 +50,7 @@ AC_DEFINE_UNQUOTED([YCC_COMPILE_TIME], ["`date`"], ["Compile-Time-Stamp"])
 AC_CONFIG_FILES([
 		 Makefile
 		 man/Makefile
+		 po/Makefile
                  src/Makefile
                  src/common/Makefile
                  src/algos/Makefile
