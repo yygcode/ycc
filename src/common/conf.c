@@ -50,7 +50,7 @@ static inline ssize_t __key_check_len(const char *key)
 	if (n && n < LINE_MAX)
 		return n;
 
-	DBG_PRINTF("key length (%zu) invalid, range(%zu, %zu))\n",
+	DBGP("key length (%zu) invalid, range(%zu, %zu))\n",
 		   n, 0, LINE_MAX);
 
 	errno = E2BIG;
@@ -124,7 +124,7 @@ __gen_line_new(char *line, const char *key, const char *value_fmt, va_list ap)
 
 	len1 += len2;
 	if (len1 > LINE_MAX - 2) {
-		DBG_PRINTF("key,value too long: %d, range: (%d, %d)\n",
+		DBGP("key,value too long: %d, range: (%d, %d)\n",
 			   len1, 0, LINE_MAX);
 		errno = E2BIG;
 		return -1;
@@ -152,7 +152,7 @@ conf_write(const char *file, const char *key, const char *value_fmt, ...)
 		return -1;
 
 	if (!(stream_tmp = fopen(file_tmp, "w+"))) {
-		DBG_PERROR("open %s failed", file_tmp);
+		DBGP("open %s failed", file_tmp);
 		return -1;
 	}
 
@@ -217,7 +217,7 @@ ssize_t conf_erase(const char *file, const char *key)
 		return -1;
 
 	if (!(stream_tmp = fopen(file_tmp, "w+"))) {
-		DBG_PERROR("open %s failed", file_tmp);
+		DBGP("open %s failed", file_tmp);
 		goto ERR_fopen_new;
 	}
 
@@ -267,7 +267,7 @@ ssize_t conf_read_string_safe(const char *file,
 
 	len = strlen(buf);
 	if (len > size) {
-		DBG_PRINTF("value too long (%zu, %zu)\n", len, size);
+		DBGP("value too long (%zu, %zu)\n", len, size);
 		errno = E2BIG;
 		return -1;
 	}

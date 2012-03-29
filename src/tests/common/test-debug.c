@@ -51,8 +51,7 @@ void test_debug()
 		exit(1);
 	}
 
-	DBG_PRINTF("debug print");
-	OUT_PRINTF("success");
+	DBGP("debug print");
 }
 
 void test_ndebug()
@@ -72,8 +71,7 @@ void test_ndebug()
 		exit(1);
 	}
 
-	DBG_PRINTF("debug print");
-	OUT_PRINTF("success");
+	DBGP("debug print");
 }
 
 int main()

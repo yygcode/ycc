@@ -28,7 +28,7 @@
 
 #include <ycc/common/debug.h>
 
-static bool bstamp = false;
+static bool bstamp = true;
 
 void set_dbgstamp(bool stamp)
 {
@@ -40,12 +40,13 @@ bool get_dbgstamp()
 	return bstamp;
 }
 
-void __dvfprintf(FILE *stream,
-	      const char *file,
-	      const char *func,
-	      size_t line,
-	      const char *fmt,
-	      va_list ap)
+void __dbg_vprintf(FILE *stream,
+		   const char *file,
+		   const char *func,
+		   size_t line,
+		   bool berr,
+		   const char *fmt,
+		   va_list ap)
 {
 	char buf[32];
 	size_t i = 0;
@@ -65,10 +66,10 @@ void __dvfprintf(FILE *stream,
 
 	fprintf(stream, "%s %s, %zu, %s: ", buf, file, line, func);
 	vfprintf(stream, fmt, ap);
-	if (stream == stderr) {
+	if (berr) {
 		fprintf(stream, ": %s\n", strerror(errno));
-	} else if (stream == stdout && *fmt) {
-		/* append a LR if fmt's suffix is not LF */
+	} else if (*fmt) {
+		/* append a LF if fmt's suffix is not LF */
 		i = strlen(fmt);
 		--i;	/* i is always positive */
 		if (fmt[i] != '\n')

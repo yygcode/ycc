@@ -38,12 +38,12 @@ char *pathname_tmp(const char *pathname, char *pathname_dest, size_t size)
 
 	n = strlen(pathname)+12;
 	if (name_tmp && n > size) {
-		DBG_PRINTF("name_tmp but too small (%zu, %zu)", n, size);
+		DBGP("name_tmp but too small (%zu, %zu)", n, size);
 		return NULL;
 	}
 
 	if (!name_tmp && !(name_tmp = (char*)malloc(n))) {
-		DBG_PERROR("name_tmp malloc(%zu) failed", n);
+		DBGE("name_tmp malloc(%zu) failed", n);
 		return NULL;
 	}
 
