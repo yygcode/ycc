@@ -26,7 +26,7 @@
 int main()
 {
 	if (GLOG_OPEN("/tmp/tests/common/test-log.log", 1, LOG_DEBUG)) {
-		OUT_PERROR("LOG_OPEN failed");
+		DBGE("LOG_OPEN failed");
 		return 1;
 	}
 
@@ -44,7 +44,7 @@ int main()
 	
 	log = log_open("/tmp/tests/common/test-yyg.log", 0, LOG_NOTICE);
 	if (!log) {
-		OUT_PERROR("log_open failed");
+		DBGE("log_open failed");
 		return 1;
 	}
 
@@ -60,7 +60,7 @@ int main()
 
 	log = log_open("tmp/test/common/test-yyg.log", 1, LOG_WARNING);
 	if (!log) {
-		OUT_PERROR("log_open failed");
+		DBGE("log_open failed");
 		return 1;
 	}
 
@@ -74,7 +74,7 @@ int main()
 	log_write(log, LOG_NOTICE, "This is yyg log %d", 2000);
 	log_write(log, LOG_WARNING, "This is yyg log %d", 2000);
 
-	DBG_PRINTF("success");
+	DBGP("success");
 	return 0;
 }
 

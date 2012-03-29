@@ -36,58 +36,47 @@ bool get_dbgstamp();
 #ifdef NDEBUG
 /* NDEBUG: turn off */
 #define DBG_INSERT(...)		__ASSERT_VOID_CAST(0)
-#define DBG_PRINTF(fmt, ...)	__ASSERT_VOID_CAST(0)
-#define DBG_PERROR(fmt, ...)	__ASSERT_VOID_CAST(0)
-#define DBG_VPRINTF(fmt, ap)	__ASSERT_VOID_CAST(0)
-#define DBG_VPERROR(fmt, ap)	__ASSERT_VOID_CAST(0)
+#define DBGP(fmt, ...)		__ASSERT_VOID_CAST(0)
+#define DBGE(fmt, ...)		__ASSERT_VOID_CAST(0)
+#define DBGVP(fmt, ...)		__ASSERT_VOID_CAST(0)
+#define DBGVE(fmt, ...)		__ASSERT_VOID_CAST(0)
 #else
-#define DBG_INSERT(...)		__VA_ARGS__
-#define DBG_PRINTF(fmt, ...)	__dfprintf(					\
-					stdout, __FILE__, __func__, __LINE__,	\
-					(fmt), ## __VA_ARGS__)
-#define DBG_VPRINTF(fmt, ap)	__dvfprintf(					\
-					stdout, __FILE__, __func__, __LINE__,	\
-					(fmt), (ap))
-#define DBG_PERROR(fmt, ...)	__dfprintf(					\
-					stderr, __FILE__, __func__, __LINE__,	\
-					(fmt), ## __VA_ARGS__)
-#define DBG_VPERROR(fmt, ap)	__dvfprintf(					\
-					stderr, __FILE__, __func__, __LINE__,	\
-					(fmt), (ap))
-
+#define DBG_INSERT(...)	__VA_ARGS__
+#define DBGP(fmt, ...)	__dbg_fprintf(					\
+				stderr, __FILE__, __func__, __LINE__,	\
+				false, (fmt), ## __VA_ARGS__)
+#define DBGVP(fmt, ap)	__dbg_vprintf(					\
+				stderr, __FILE__, __func__, __LINE__,	\
+				false, (fmt), (ap))
+#define DBGE(fmt, ...)	__dbg_fprintf(					\
+				stderr, __FILE__, __func__, __LINE__,	\
+				true, (fmt), ## __VA_ARGS__)
+#define DBGVE(fmt, ap)	__dbg_vprintf(					\
+				stderr, __FILE__, __func__, __LINE__,	\
+				true, (fmt), (ap))
 #endif
 
-#define OUT_INSERT(...)		__VA_ARGS__
+void __dbg_vprintf(FILE *stream,
+		   const char *file,
+		   const char *func,
+		   size_t line,
+		   bool berr,
+		   const char *fmt,
+		   va_list ap);
 
-#define OUT_PRINTF(fmt, ...)	__dfprintf(					\
-					stdout, __FILE__, __func__, __LINE__,	\
-					(fmt), ## __VA_ARGS__)
-#define OUT_VPRINTF(fmt, ap)	__dvfprintf(					\
-					stdout, __FILE__, __func__, __LINE__,	\
-					(fmt), (ap))
-#define OUT_PERROR(fmt, ...)	__dfprintf(					\
-					stderr, __FILE__, __func__, __LINE__,	\
-					(fmt), ## __VA_ARGS__)
-#define OUT_VPERROR(fmt, ap)	__dvfprintf(					\
-					stderr, __FILE__, __func__, __LINE__,	\
-					(fmt), (ap))
-void __dvfprintf(FILE *stream,
-	      const char *file,
-	      const char *func,
-	      size_t line,
-	      const char *fmt,
-	      va_list ap);
-static inline void __dfprintf(FILE *stream,
-			      const char *file,
-			      const char *func,
-			      size_t line,
-			      const char *fmt,
-			      ...)
+static inline
+void __dbg_fprintf(FILE *stream,
+		   const char *file,
+		   const char *func,
+		   size_t line,
+		   bool berr,
+		   const char *fmt,
+		   ...)
 {
 	va_list ap;
 
 	va_start(ap, fmt);
-	__dvfprintf(stream, file, func, line, fmt, ap);
+	__dbg_vprintf(stream, file, func, line, berr, fmt, ap);
 	va_end(ap);
 }
 

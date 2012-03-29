@@ -69,7 +69,7 @@ static inline bool __log_valid(const struct log_info *log)
 {
 	DBG_INSERT(
 		if(!(log && log->magic == LMAGIC))
-			DBG_PRINTF("log invalid: %p", log););
+			DBGP("log invalid: %p", log););
 
 	return log && log->magic == LMAGIC;
 }
@@ -80,12 +80,12 @@ static inline FILE *__log_fopen(const char *path)
 
 	/* create directory recursively */
 	if (!*path || mkdir_p(path) < 0) {
-		DBG_PRINTF("empty path or create directory failed: %s", path);
+		DBGE("empty path or create directory failed: %s", path);
 		return NULL;
 	}
 
 	if (!(stream = fopen(path, "a"))) {
-		DBG_PERROR("fopen '%s' failed", path);
+		DBGE("fopen '%s' failed", path);
 		return NULL;
 	}
 
@@ -97,7 +97,7 @@ struct log_info *log_open_stream(FILE *stream, int console, int level)
 	struct log_info *log;
 
 	if (!(log = (struct log_info*)malloc(sizeof(*log)))) {
-		DBG_PERROR("malloc log failed");
+		DBGE("malloc log failed");
 		return NULL;
 	}
 
@@ -173,14 +173,14 @@ int log_vwrite(struct log_info *log, int level, const char *fmt, va_list ap)
 		return -1;
 
 	if (!log->stream && !log->console) {
-		DBG_PRINTF("log(%p) stream and console both off\n");
+		DBGP("log(%p) stream and console both off\n");
 		return -1;
 	}
 
 	if (level < 0)
 		level = LOG_INFO;
 	if (level > log->level) {
-		DBG_PRINTF("limit-level = %d, level = %d, ignore this log",
+		DBGP("limit-level = %d, level = %d, ignore this log",
 			   log->level, level);
 		return -1;
 	}
@@ -222,7 +222,7 @@ int log_vwrite(struct log_info *log, int level, const char *fmt, va_list ap)
 		struct stat sb;
 		if (log->path && stat(log->path, &sb)) {
 			/* delete by user ? */
-			DBG_PRINTF("log '%s' lost, reopen it\n", log->path);
+			DBGP("log '%s' lost, reopen it\n", log->path);
 			fclose(log->stream);
 			log->stream = __log_fopen(log->path);
 			if (!log->stream)

@@ -37,18 +37,18 @@ int mkdir_p(const char *path)
 	assert(path);
 
 	if ((n = strlen(path)) >= PATH_MAX) {
-		DBG_PRINTF("over length: %d, %d", n, PATH_MAX);
+		DBGP("over length: %d, %d", n, PATH_MAX);
 		return -1;
 	}
 
-	DBG_PRINTF("len=%d; path='%s'\n", n, path);
+	DBGP("len=%d; path='%s'\n", n, path);
 
 	strcpy(buf, path);
 	while ((p = strchr(p+1, '/'))) {
 		struct stat sb;
 		*p = '\0';
 		if (stat(buf, &sb) && mkdir(buf, ACCESSPERMS)) {
-			DBG_PERROR("stat/create '%s' failed", buf);
+			DBGE("stat/create '%s' failed", buf);
 			return -1;
 		}
 		*p = '/';
