@@ -1,0 +1,13 @@
+* Wiki (http://en.wikipedia.org/wiki/Trie)
+A trie or prefix tree, is an ordered tree data structure that is used to store
+  an associative array where the keys are usually strings. Unlike an binary
+  search tree, no node in the tree store the key associated with that node;
+  instead, its position in the tree defines the key with which its associated.
+  All the descendants have a common prefix of the string associated with that
+  node, and the root is associated with the empty string. Values are normally
+  not associated with every node, only with leaves and some inner nodes that
+  correspond to keys of interest.
+
+The term trie comes from retrieval. And is pronounced /ˈtraɪ/ "try".
+
+
