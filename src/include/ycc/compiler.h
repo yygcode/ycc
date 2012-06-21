@@ -1,5 +1,5 @@
 /*
- * config-ycc.h: project config header file
+ * compiler.h: compiler options
  *
  * Copyright (C) 2012-2013 yanyg (yygcode@gmail.com, cppgp@qq.com)
  *
@@ -18,11 +18,11 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __YCC_CONFIG_YCC_H_
-#define __YCC_CONFIG_YCC_H_
+#ifndef __YCC_COMPILER_H_
+#define __YCC_COMPILER_H_	1
 
 #ifdef __GNUC__
-#include <ycc/compiler.h>
+#include <ycc/compiler-gcc.h>
 #endif
 
 #ifndef __aligned
@@ -30,40 +30,15 @@
 #endif
 
 #ifndef __always_inline
-#define __always_inline inline
+#define __always_inline		static
 #endif
 
-/*
- * offsetof(TYPE, MEMBER)
- *  the offset of MEMBER of structure TYPE */
-#ifndef offsetof
-#ifdef __compiler_offsetof
-#define offsetof(TYPE, MEMBER)	__compiler_offsetof(TYPE,MEMBER)
-#else
-#define offsetof(TYPE, MEMBER)	((size_t) &((TYPE*)0)->MEMBER)
-#endif
+#ifndef __printf
+#define __printf(a, b)
 #endif
 
-#ifndef container_of
-#define container_of(ptr, type, member)	\
-	((type*)((char*)ptr - offsetof(type, member)))
+#ifndef __scanf
+#define __scanf(a, b)
 #endif
 
-#ifndef __YCC_UNUSED
-#define __YCC_UNUSED(var)	((void)(var))
 #endif
-
-#ifndef __BEGIN_DECLS
-#ifdef __END_DECLS
-# undef __END_DECLS
-#endif
-#ifdef  __cplusplus
-# define __BEGIN_DECLS  extern "C" {
-# define __END_DECLS    }
-#else
-# define __BEGIN_DECLS
-# define __END_DECLS
-#endif
-#endif
-
-#endif /* __YCC_CONFIG_YCC_H_ */

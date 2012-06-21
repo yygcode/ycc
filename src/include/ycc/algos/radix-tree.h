@@ -1,5 +1,5 @@
 /*
- * config-gcc.h: macro of GNU GCC compiler options
+ * raidx-tree.h -- Radix Tree
  *
  * Copyright (C) 2012-2013 yanyg (yygcode@gmail.com, cppgp@qq.com)
  *
@@ -18,15 +18,20 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __YCC_CONFIG_GCC_H_
-#define __YCC_CONFIG_GCC_H_
+#ifndef __YCC_ALGOS_RAIDX_TREE_H_
+#define __YCC_ALGOS_RAIDX_TREE_H_	1
 
-#ifndef __aligned
-#define __aligned(x)			__attribute__((aligned(x)))
+#include <ycc/config-ycc.h>
+
+__BEGIN_DECLS
+
+struct radix_tree_root {
+	size_t height;
+	struct radix_tree_node *rnode;
+};
+
+ssize_t raidx_tree_insert(struct radix_tree_root *root, size_t index, void *item);
+
+__END_DECLS
+
 #endif
-
-#ifndef __always_inline
-#define __always_inline		inline __attribute__((always_inline))
-#endif
-
-#endif /* __YCC_CONFIG_GCC_H_ */

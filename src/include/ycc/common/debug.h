@@ -1,7 +1,9 @@
 /*
- * debug.h
+ * debug.h - I/O routines for debugging
  *
  * Copyright (C) 2012-2013 yanyg (yygcode@gmail.com, cppgp@qq.com)
+ *
+ * Mon Jun 11, 2012
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +21,7 @@
  */
 
 #ifndef __YCC_COMMON_DEBUG_H_
-#define __YCC_COMMON_DEBUG_H_
+#define __YCC_COMMON_DEBUG_H_	1
 
 #include <assert.h>
 #include <stdarg.h>
@@ -83,5 +85,3 @@ void __dbg_fprintf(FILE *stream,
 __END_DECLS
 
 #endif /* __YCC_COMMON_DEBUG_H_ */
-
-/* eof */
