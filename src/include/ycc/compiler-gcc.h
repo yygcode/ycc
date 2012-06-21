@@ -18,15 +18,16 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __YCC_CONFIG_GCC_H_
-#define __YCC_CONFIG_GCC_H_
+#ifndef __YCC_COMPILER_GCC_H_
+#define __YCC_COMPILER_GCC_H_
 
-#ifndef __aligned
-#define __aligned(x)			__attribute__((aligned(x)))
-#endif
+#define __aligned(x)		__attribute__((__aligned__(x)))
 
 #ifndef __always_inline
-#define __always_inline		inline __attribute__((always_inline))
+#define __always_inline		inline __attribute__((__always_inline__))
 #endif
+
+#define __printf(a, b)		__attribute__((__format(printf, a, b)))
+#define __scanf(a, b)		__attribute__((__format(scanf, a, b)))
 
 #endif /* __YCC_CONFIG_GCC_H_ */

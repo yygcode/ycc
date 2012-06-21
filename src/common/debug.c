@@ -1,7 +1,9 @@
 /*
- * debug.c
+ * debug.c - I/O routines for debuging
  *
  * Copyright (C) 2012-2013 yanyg (yygcode@gmail.com, cppgp@qq.com)
+ *
+ * Mon Jun 11, 2012
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,16 +30,21 @@
 
 #include <ycc/common/debug.h>
 
-static bool bstamp = false;
+/*
+ * _bstamp - debug timestamp switch
+ *	true: add the timestamp prefix for per line message
+ *	false: contrary to the above
+ */
+static bool _bstamp = false;
 
 void set_dbgstamp(bool stamp)
 {
-	bstamp = stamp;
+	_bstamp = stamp;
 }
 
 bool get_dbgstamp()
 {
-	return bstamp;
+	return _bstamp;
 }
 
 void __dvfprintf(FILE *stream,
@@ -51,7 +58,7 @@ void __dvfprintf(FILE *stream,
 	size_t i = 0;
 	static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
-	if(bstamp) {
+	if(_bstamp) {
 		time_t now = time(NULL);
 		struct tm now_tm;
 		i = strftime(buf, 31,
@@ -77,5 +84,3 @@ void __dvfprintf(FILE *stream,
 
 	pthread_mutex_unlock(&lock);
 }
-
-/* eof */
