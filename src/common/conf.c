@@ -1,5 +1,5 @@
 /*
- * conf.c
+ * conf.c - read/write config items
  *
  * Copyright (C) 2012-2013 yanyg (yygcode@gmail.com, cppgp@qq.com)
  *
@@ -43,21 +43,21 @@
 #include <ycc/common/unistd.h>
 #include <ycc/common/conf.h>
 
-static inline ssize_t __key_check_len(const char *key)
+static __always_inline ssize_t __key_check_len(const char *key)
 {
 	ssize_t n = (ssize_t)strlen(key);
 
 	if (n && n < LINE_MAX)
 		return n;
 
-	DBGP("key length (%zu) invalid, range(%zu, %zu))\n",
+	DBG_PR("key length (%zd) invalid, range(%d, %d))\n",
 		   n, 0, LINE_MAX);
 
 	errno = E2BIG;
 	return -1;
 }
 
-ssize_t
+ssize_t __scanf(3, 4)
 conf_read(const char *file, const char *key, const char *value_fmt, ...)
 {
 	FILE *stream;
@@ -111,7 +111,7 @@ conf_read(const char *file, const char *key, const char *value_fmt, ...)
 	return rtn;
 }
 
-static inline int
+static __always_inline int
 __gen_line_new(char *line, const char *key, const char *value_fmt, va_list ap)
 {
 	int len1, len2;
@@ -124,7 +124,7 @@ __gen_line_new(char *line, const char *key, const char *value_fmt, va_list ap)
 
 	len1 += len2;
 	if (len1 > LINE_MAX - 2) {
-		DBGP("key,value too long: %d, range: (%d, %d)\n",
+		DBG_PR("key,value too long: %d, range: (%d, %d)\n",
 			   len1, 0, LINE_MAX);
 		errno = E2BIG;
 		return -1;
@@ -136,7 +136,7 @@ __gen_line_new(char *line, const char *key, const char *value_fmt, va_list ap)
 	return len1;
 }
 
-ssize_t
+ssize_t __printf(3, 4)
 conf_write(const char *file, const char *key, const char *value_fmt, ...)
 {
 	va_list ap;
@@ -152,7 +152,7 @@ conf_write(const char *file, const char *key, const char *value_fmt, ...)
 		return -1;
 
 	if (!(stream_tmp = fopen(file_tmp, "w+"))) {
-		DBGP("open %s failed", file_tmp);
+		DBG_PR("open %s failed", file_tmp);
 		return -1;
 	}
 
@@ -217,7 +217,7 @@ ssize_t conf_erase(const char *file, const char *key)
 		return -1;
 
 	if (!(stream_tmp = fopen(file_tmp, "w+"))) {
-		DBGP("open %s failed", file_tmp);
+		DBG_PR("open %s failed", file_tmp);
 		goto ERR_fopen_new;
 	}
 
@@ -267,7 +267,7 @@ ssize_t conf_read_string_safe(const char *file,
 
 	len = strlen(buf);
 	if (len > size) {
-		DBGP("value too long (%zu, %zu)\n", len, size);
+		DBG_PR("value too long (%zu, %zu)\n", len, size);
 		errno = E2BIG;
 		return -1;
 	}

@@ -45,7 +45,7 @@ struct log_info
 	pthread_mutex_t lock;
 };
 
-static struct log_info out_info = {
+static struct log_info pr_info = {
 	NULL,
 	1,
 	LOG_DEBUG,
@@ -55,7 +55,7 @@ static struct log_info out_info = {
 };
 
 struct log_info *_ycc_glog = NULL;
-struct log_info *_ycc_gout = &out_info;
+struct log_info *_ycc_pr = &pr_info;
 
 static inline int __log_level(int level)
 {
@@ -69,7 +69,7 @@ static inline bool __log_valid(const struct log_info *log)
 {
 	DBG_INSERT(
 		if(!(log && log->magic == LMAGIC))
-			DBGP("log invalid: %p", log););
+			DBG_PR("log invalid: %p", log););
 
 	return log && log->magic == LMAGIC;
 }
@@ -80,12 +80,12 @@ static inline FILE *__log_fopen(const char *path)
 
 	/* create directory recursively */
 	if (!*path || mkdir_p(path) < 0) {
-		DBGE("empty path or create directory failed: %s", path);
+		DBG_PE("empty path or create directory failed: %s", path);
 		return NULL;
 	}
 
 	if (!(stream = fopen(path, "a"))) {
-		DBGE("fopen '%s' failed", path);
+		DBG_PE("fopen '%s' failed", path);
 		return NULL;
 	}
 
@@ -97,7 +97,7 @@ struct log_info *log_open_stream(FILE *stream, int console, int level)
 	struct log_info *log;
 
 	if (!(log = (struct log_info*)malloc(sizeof(*log)))) {
-		DBGE("malloc log failed");
+		DBG_PE("malloc log failed");
 		return NULL;
 	}
 
@@ -149,6 +149,18 @@ int log_get(const struct log_info *log, int *console, unsigned int *level)
 	return 0;
 }
 
+int log_write(struct log_info *log, int level, const char *fmt, ...)
+{
+	int i;
+	va_list ap;
+
+	va_start(ap, fmt);
+	i = log_vwrite(log, level, fmt, ap);
+	va_end(ap);
+
+	return i;
+}
+
 int log_vwrite(struct log_info *log, int level, const char *fmt, va_list ap)
 {
 	static const char *sl[] = {
@@ -173,14 +185,14 @@ int log_vwrite(struct log_info *log, int level, const char *fmt, va_list ap)
 		return -1;
 
 	if (!log->stream && !log->console) {
-		DBGP("log(%p) stream and console both off\n");
+		DBG_PR("log(%p) stream and console both off\n", log->stream);
 		return -1;
 	}
 
 	if (level < 0)
 		level = LOG_INFO;
 	if (level > log->level) {
-		DBGP("limit-level = %d, level = %d, ignore this log",
+		DBG_PR("limit-level = %d, level = %d, ignore this log",
 			   log->level, level);
 		return -1;
 	}
@@ -192,7 +204,7 @@ int log_vwrite(struct log_info *log, int level, const char *fmt, va_list ap)
 	buf[i] = '\0';
 
 	/* need append line-feed ? */
-	if ((i = strlen(fmt)) && fmt[i-1] != '\n')
+	if (!(i = strlen(fmt)) || fmt[i-1] != '\n')
 		blr = true;
 
 	/* lock write for multi-threads apps. */
@@ -222,7 +234,7 @@ int log_vwrite(struct log_info *log, int level, const char *fmt, va_list ap)
 		struct stat sb;
 		if (log->path && stat(log->path, &sb)) {
 			/* delete by user ? */
-			DBGP("log '%s' lost, reopen it\n", log->path);
+			DBG_PR("log '%s' lost, reopen it\n", log->path);
 			fclose(log->stream);
 			log->stream = __log_fopen(log->path);
 			if (!log->stream)
@@ -272,4 +284,13 @@ int log_close(struct log_info *log)
 	return 0;
 }
 
-/* eof */
+int _log_open_glog(const char *path, int console, int level)
+{
+	if (_ycc_glog)
+		log_close(_ycc_glog);
+	_ycc_glog = log_open(path, console, level);
+	if (_ycc_glog)
+		return 0;
+
+	return -1;
+}

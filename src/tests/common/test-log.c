@@ -25,26 +25,26 @@
 
 int main()
 {
-	if (GLOG_OPEN("/tmp/tests/common/test-log.log", 1, LOG_DEBUG)) {
-		DBGE("LOG_OPEN failed");
+	if (gl_open("/tmp/tests/common/test-log.log", 1, LOG_DEBUG)) {
+		pr_err("LOG_OPEN failed");
 		return 1;
 	}
 
-	GLOG_WRITE(LOG_DEBUG, "This is first log, write by %s", "yanyg");
-	GLOG_WRITE(LOG_INFO, "This is first log, write by %s", "yanyg");
-	GLOG_WRITE(LOG_NOTICE, "This is first log, write by %s", "yanyg");
-	GLOG_WRITE(LOG_WARNING, "This is first log, write by %s", "yanyg");
-	GLOG_WRITE(LOG_ERR, "This is first log, write by %s", "yanyg");
-	GLOG_WRITE(LOG_CRIT, "This is first log, write by %s", "yanyg");
-	GLOG_WRITE(LOG_ALERT, "This is first log, write by %s", "yanyg");
-	GLOG_WRITE(LOG_EMERG, "This is first log, write by %s", "yanyg");
-	GLOG_WRITE(10, "This is first log, write by %s", "yanyg");
+	gl_write(LOG_DEBUG, "This is first log, write by %s", "yanyg");
+	gl_write(LOG_INFO, "This is first log, write by %s", "yanyg");
+	gl_write(LOG_NOTICE, "This is first log, write by %s", "yanyg");
+	gl_write(LOG_WARNING, "This is first log, write by %s", "yanyg");
+	gl_write(LOG_ERR, "This is first log, write by %s", "yanyg");
+	gl_write(LOG_CRIT, "This is first log, write by %s", "yanyg");
+	gl_write(LOG_ALERT, "This is first log, write by %s", "yanyg");
+	gl_write(LOG_EMERG, "This is first log, write by %s", "yanyg");
+	gl_write(10, "This is first log, write by %s", "yanyg");
 
 	struct log_info *log;
 	
 	log = log_open("/tmp/tests/common/test-yyg.log", 0, LOG_NOTICE);
 	if (!log) {
-		DBGE("log_open failed");
+		DBG_PE("log_open failed");
 		return 1;
 	}
 
@@ -60,7 +60,7 @@ int main()
 
 	log = log_open("tmp/test/common/test-yyg.log", 1, LOG_WARNING);
 	if (!log) {
-		DBGE("log_open failed");
+		DBG_PE("log_open failed");
 		return 1;
 	}
 
@@ -74,7 +74,7 @@ int main()
 	log_write(log, LOG_NOTICE, "This is yyg log %d", 2000);
 	log_write(log, LOG_WARNING, "This is yyg log %d", 2000);
 
-	DBGP("success");
+	DBG_PR("success");
 	return 0;
 }
 

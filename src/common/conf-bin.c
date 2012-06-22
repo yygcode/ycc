@@ -72,7 +72,7 @@ static ssize_t __check_head(int fd)
 	if ((r = readn(fd, &bh, sizeof(bh))) != sizeof(bh)) {
 		if (r == 0)
 			return 0;	/* empty file ? */
-		DBGE("readn bin_head %zd failed", r);
+		DBG_PE("readn bin_head %zd failed", r);
 		return -1;
 	}
 
@@ -80,7 +80,7 @@ static ssize_t __check_head(int fd)
 	version = le32toh(bh.version);
 
 	if (magic != MAGIC_HEAD || version < CONF_VERSION) {
-		DBGP("magic(%x) or version(%x) error", magic, version);
+		DBG_PR("magic(%x) or version(%x) error", magic, version);
 		return -1;
 	}
 
@@ -95,7 +95,7 @@ static inline ssize_t __write_head(int fd)
 	};
 
 	if (writen(fd, &bh, sizeof(bh)) != sizeof(bh)) {
-		DBGE("writen bin_head failed");
+		DBG_PE("writen bin_head failed");
 		return -1;
 	}
 
@@ -120,13 +120,13 @@ static ssize_t __check_copy(int fd, int fd_new, size_t count)
 			n = 256;
 
 		if (readn(fd, buf, n) != n) {
-			DBGE("read(%zu %zu %zu) from %d failed",
+			DBG_PE("read(%zu %zu %zu) from %d failed",
 				   count, offset, n, fd);
 			return -1;
 		}
 
 		if (fd_new >= 0 && write(fd_new, buf, n) != n) {
-			DBGE("write buf %zu failed", n);
+			DBG_PE("write buf %zu failed", n);
 			return -1;
 		}
 
@@ -146,7 +146,7 @@ static ssize_t __cmp_key(int fd, const void *key, size_t key_len)
 			n = 256;
 
 		if (readn(fd, buf, n) != n) {
-			DBGE("read key(offset = %zu, n = %zu) failed",
+			DBG_PE("read key(offset = %zu, n = %zu) failed",
 				   offset, n);
 			return -2;
 		}
@@ -154,7 +154,7 @@ static ssize_t __cmp_key(int fd, const void *key, size_t key_len)
 		if (memcmp(buf, key + offset, n)) {
 			offset += n;
 			if (lseek(fd, -(ssize_t)offset, SEEK_CUR) < 0) {
-				DBGE("lseek %zd failed",
+				DBG_PE("lseek %zd failed",
 					   -(ssize_t)offset);
 				return -2;
 			}
@@ -180,7 +180,7 @@ static ssize_t __find_key(int fd, int fd_new, const void *key, size_t key_len,
 		vlen = le32toh(bi.value_len);
 
 		if (magic != MAGIC_ITEM) {
-			DBGP("magic(%x) dismatch, check format", magic);
+			DBG_PR("magic(%x) dismatch, check format", magic);
 			return -2;
 		}
 
@@ -191,7 +191,7 @@ static ssize_t __find_key(int fd, int fd_new, const void *key, size_t key_len,
 
 			if (__check_write(fd_new, &bi, sizeof(bi)) < 0 ||
 			    __check_copy(fd, fd_new, klen + vlen) < 0) {
-				DBGE("__check_write/__check_copy failed");
+				DBG_PE("__check_write/__check_copy failed");
 				return -2;
 			}
 			continue;
@@ -242,7 +242,7 @@ static ssize_t __copy_left(int fd, int fd_new)
 
 	while ((n = readn(fd, buf, 256)) > 0) {
 		if (write(fd_new, buf, n) != n) {
-			DBGE("write buf %zu failed", n);
+			DBG_PE("write buf %zu failed", n);
 			return -1;
 		}
 	}
@@ -259,7 +259,7 @@ ssize_t conf_read_bin(const char *file,
 	ssize_t r = -1;
 	
 	if ((fd = open(file, O_RDONLY)) < 0) {
-		DBGE("open %s failed", file);
+		DBG_PE("open %s failed", file);
 		return -1;
 	}
 
@@ -293,7 +293,7 @@ ssize_t conf_op_bin(int type, const char *file,
 		return -1;
 
 	if ((fd_new = open(file_tmp, O_WRONLY|O_CREAT, ACCESSPERMS)) < 0) {
-		DBGE("open %s failed", file_tmp);
+		DBG_PE("open %s failed", file_tmp);
 		return -1;
 	}
 	if ((r = __write_head(fd_new)) < 0)
