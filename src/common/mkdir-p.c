@@ -18,6 +18,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#include <assert.h>
 #include <limits.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -26,7 +27,7 @@
 #include <config-os.h>
 
 #include <ycc/common/unistd.h>
-#include <ycc/common/debug.h>
+#include <ycc/common/log.h>
 
 /* create directory recursively */
 int mkdir_p(const char *path)
@@ -37,18 +38,16 @@ int mkdir_p(const char *path)
 	assert(path);
 
 	if ((n = strlen(path)) >= PATH_MAX) {
-		DBG_PR("over length: %d, %d", n, PATH_MAX);
+		pr_err("path %s over length: %d %d\n", path, n, PATH_MAX);
 		return -1;
 	}
-
-	DBG_PR("len=%d; path='%s'\n", n, path);
 
 	strcpy(buf, path);
 	while ((p = strchr(p+1, '/'))) {
 		struct stat sb;
 		*p = '\0';
 		if (stat(buf, &sb) && mkdir(buf, ACCESSPERMS)) {
-			DBG_PE("stat/create '%s' failed", buf);
+			pr_err("stat/create '%s' failed", buf);
 			return -1;
 		}
 		*p = '/';

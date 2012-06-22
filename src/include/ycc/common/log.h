@@ -25,6 +25,7 @@
 #include <syslog.h>
 
 #include <ycc/config-ycc.h>
+#include <ycc/common/debug.h>
 
 __BEGIN_DECLS
 
