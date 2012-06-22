@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <config-os.h>
+
 #include <ycc/common/debug.h>
 #include <ycc/common/conf.h>
 

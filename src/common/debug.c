@@ -30,57 +30,33 @@
 
 #include <ycc/common/debug.h>
 
-/*
- * _bstamp - debug timestamp switch
- *	true: add the timestamp prefix for per line message
- *	false: contrary to the above
- */
-static bool _bstamp = false;
-
-void set_dbgstamp(bool stamp)
+void __dbg_fprintf(const char *file, const char *func, size_t line,
+		   bool berr, const char *fmt, ...)
 {
-	_bstamp = stamp;
+	va_list ap;
+
+	va_start(ap, fmt);
+	__dbg_vprintf(file, func, line, berr, fmt, ap);
+	va_end(ap);
 }
 
-bool get_dbgstamp()
+void __dbg_vprintf(const char *file, const char *func, size_t line,
+		   bool berr, const char *fmt, va_list ap)
 {
-	return _bstamp;
-}
-
-void __dvfprintf(FILE *stream,
-	      const char *file,
-	      const char *func,
-	      size_t line,
-	      const char *fmt,
-	      va_list ap)
-{
-	char buf[32];
-	size_t i = 0;
 	static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
-	if(_bstamp) {
-		time_t now = time(NULL);
-		struct tm now_tm;
-		i = strftime(buf, 31,
-			     "%h %e %T ",
-			     localtime_r(&now, &now_tm));
-	}
-	buf[i] = '\0';
+	int i;
 
 	/* lock write for multi-threads apps. */
 	pthread_mutex_lock(&lock);
 
-	fprintf(stream, "%s %s, %zu, %s: ", buf, file, line, func);
-	vfprintf(stream, fmt, ap);
-	if (stream == stderr) {
-		fprintf(stream, ": %s\n", strerror(errno));
-	} else if (stream == stdout && *fmt) {
-		/* append a LR if fmt's suffix is not LF */
-		i = strlen(fmt);
-		--i;	/* i is always positive */
-		if (fmt[i] != '\n')
-			fprintf(stream, "\n");
-	}
+	/*
+	 * debug-format: <source-name>, <line-no>, <func-name>, <format-value>
+	 */
+	fprintf(stderr, "%s, %zu, %s: ", file, line, func);
+	vfprintf(stderr, fmt, ap);
+	if (berr) fprintf(stderr, ": %s\n", strerror(errno));
+	if (!(i = strlen(fmt)) || fmt[i-1] != '\n') fprintf(stderr, "\n");
 
 	pthread_mutex_unlock(&lock);
 }

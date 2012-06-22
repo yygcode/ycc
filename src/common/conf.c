@@ -1,5 +1,7 @@
 /*
- * conf.c
+ * conf.c - read/write config items
+ *
+ * Sat Mar 3, 2012
  *
  * Copyright (C) 2012-2013 yanyg (yygcode@gmail.com, cppgp@qq.com)
  *
@@ -39,26 +41,25 @@
 
 #include <config-os.h>
 
-#include <ycc/common/debug.h>
+#include <ycc/common/log.h>
 #include <ycc/common/unistd.h>
 #include <ycc/common/conf.h>
 
-static inline ssize_t __key_check_len(const char *key)
+static __always_inline ssize_t __key_check_len(const char *key)
 {
 	ssize_t n = (ssize_t)strlen(key);
 
 	if (n && n < LINE_MAX)
 		return n;
 
-	DBG_PRINTF("key length (%zu) invalid, range(%zu, %zu))\n",
+	pr_err("key length (%zd) invalid, range(%d, %d))\n",
 		   n, 0, LINE_MAX);
 
 	errno = E2BIG;
 	return -1;
 }
 
-ssize_t
-conf_read(const char *file, const char *key, const char *value_fmt, ...)
+ssize_t conf_read(const char *file, const char *key, const char *value_fmt, ...)
 {
 	FILE *stream;
 	va_list ap;
@@ -68,8 +69,10 @@ conf_read(const char *file, const char *key, const char *value_fmt, ...)
 	if ((key_len = __key_check_len(key)) < 0)
 		return rtn;
 
-	if (!(stream = fopen(file, "r")))
+	if (!(stream = fopen(file, "r"))) {
+		pr_err("open file %s failed\n", file);
 		return -1;
+	}
 
 	while ((beg=fgets(line, LINE_MAX, stream))) {
 		while (isspace(*beg))
@@ -111,7 +114,7 @@ conf_read(const char *file, const char *key, const char *value_fmt, ...)
 	return rtn;
 }
 
-static inline int
+static __always_inline int
 __gen_line_new(char *line, const char *key, const char *value_fmt, va_list ap)
 {
 	int len1, len2;
@@ -124,7 +127,7 @@ __gen_line_new(char *line, const char *key, const char *value_fmt, va_list ap)
 
 	len1 += len2;
 	if (len1 > LINE_MAX - 2) {
-		DBG_PRINTF("key,value too long: %d, range: (%d, %d)\n",
+		pr_err("key,value too long: %d, range: (%d, %d)\n",
 			   len1, 0, LINE_MAX);
 		errno = E2BIG;
 		return -1;
@@ -136,7 +139,7 @@ __gen_line_new(char *line, const char *key, const char *value_fmt, va_list ap)
 	return len1;
 }
 
-ssize_t
+ssize_t __printf(3, 4)
 conf_write(const char *file, const char *key, const char *value_fmt, ...)
 {
 	va_list ap;
@@ -152,7 +155,7 @@ conf_write(const char *file, const char *key, const char *value_fmt, ...)
 		return -1;
 
 	if (!(stream_tmp = fopen(file_tmp, "w+"))) {
-		DBG_PERROR("open %s failed", file_tmp);
+		pr_err("open %s failed\n", file_tmp);
 		return -1;
 	}
 
@@ -217,7 +220,7 @@ ssize_t conf_erase(const char *file, const char *key)
 		return -1;
 
 	if (!(stream_tmp = fopen(file_tmp, "w+"))) {
-		DBG_PERROR("open %s failed", file_tmp);
+		pr_err("open %s failed", file_tmp);
 		goto ERR_fopen_new;
 	}
 
@@ -267,7 +270,7 @@ ssize_t conf_read_string_safe(const char *file,
 
 	len = strlen(buf);
 	if (len > size) {
-		DBG_PRINTF("value too long (%zu, %zu)\n", len, size);
+		pr_err("value too long (%zu, %zu)\n", len, size);
 		errno = E2BIG;
 		return -1;
 	}

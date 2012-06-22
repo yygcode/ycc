@@ -1,5 +1,5 @@
 /*
- * config-ycc.h: project config header file
+ * config-ycc.h - project config header file
  *
  * Copyright (C) 2012-2013 yanyg (yygcode@gmail.com, cppgp@qq.com)
  *

@@ -25,6 +25,7 @@
 #include <syslog.h>
 
 #include <ycc/config-ycc.h>
+#include <ycc/common/debug.h>
 
 __BEGIN_DECLS
 
@@ -44,7 +45,7 @@ __BEGIN_DECLS
  * level: < 0 for default(LOG_INFO), otherwise should be LOG_* macros above
  */
 /*
- * LOG_OPEN
+ * gl_open
  *
  * success return 0, otherwise return -1.
  * 
@@ -53,60 +54,58 @@ __BEGIN_DECLS
  * console: when console is not zero LOG_WRITE/LOG_VWIRITE would
  *	    write out to stdout.
  *
- * level: when LOG_WRITE/LOG_VWRITE's level is greater than this,
+ * level: when gl_write/gl_vwrite's level is greater than this,
  *	  messages would be discarded.
  */
-#define GLOG_OPEN(path, console, level)	\
+#define gl_open(path, console, level)	\
 		(_log_open_glog((path), (console), (level)))
-#define GLOG_SET(console, level)		\
+#define gl_set(console, level)		\
 		log_set(_ycc_glog, (console), (level))
-#define GLOG_GET(pconsole, plevel)	\
+#define gl_get(pconsole, plevel)	\
 		log_get(_ycc_glog, (pconsole), (plevel))
-#define GLOG_DEBUG(fmt, ...)		\
+#define gl_debug(fmt, ...)		\
 		log_write(_ycc_glog, LOG_DEBUG, (fmt), ## __VA_ARGS__)
-#define GLOG_INFO(fmt, ...)		\
+#define gl_info(fmt, ...)		\
 		log_write(_ycc_glog, LOG_INFO, (fmt), ## __VA_ARGS__)
-#define GLOG_NOTICE(fmt, ...)		\
+#define gl_notice(fmt, ...)		\
 		log_write(_ycc_glog, LOG_NOTICE, (fmt), ## __VA_ARGS__)
-#define GLOG_WARN(fmt, ...)		\
+#define gl_warn(fmt, ...)		\
 		log_write(_ycc_glog, LOG_WARNING, (fmt), ## __VA_ARGS__)
-#define GLOG_ERR(fmt, ...)		\
+#define gl_err(fmt, ...)		\
 		log_write(_ycc_glog, LOG_ERR, (fmt), ## __VA_ARGS__)
-#define GLOG_CRIT(fmt, ...)		\
+#define gl_crit(fmt, ...)		\
 		log_write(_ycc_glog, LOG_CRIT, (fmt), ## __VA_ARGS__)
-#define GLOG_ALERT(fmt, ...)		\
+#define gl_alert(fmt, ...)		\
 		log_write(_ycc_glog, LOG_ALERT, (fmt), ## __VA_ARGS__)
-#define GLOG_EMERG(fmt, ...)		\
+#define gl_emerg(fmt, ...)		\
 		log_write(_ycc_glog, LOG_EMERG, (fmt), ## __VA_ARGS__)
-#define GLOG_WRITE(level, fmt, ...)	\
+#define gl_write(level, fmt, ...)	\
 		log_write(_ycc_glog, (level), (fmt), ## __VA_ARGS__)
-#define GLOG_VWRITE(level, fmt, ap)	\
+#define gl_vwrite(level, fmt, ap)	\
 		log_vwrite(_ycc_glog, (level), (fmt), (ap))
-#define GLOG_FLUSH()			\
-		log_flush(_ycc_glog)
-#define GLOG_CLOSE()			\
-		log_close(_ycc_glog)
+#define gl_flush()	log_flush(_ycc_glog)
+#define gl_close()	log_close(_ycc_glog)
 
-#define OUT_SET(console, level)		\
-		log_set(_ycc_gout, (console), (level))
-#define OUT_GET(pconsole, plevel)		\
-		log_get(_ycc_gout, (pconsole), (plevel))
-#define OUT_DEBUG(fmt, ...)		\
-		log_write(_ycc_gout, LOG_DEBUG, (fmt), ## __VA_ARGS__)
-#define OUT_INFO(fmt, ...)		\
-		log_write(_ycc_gout, LOG_INFO, (fmt), ## __VA_ARGS__)
-#define OUT_NOTICE(fmt, ...)		\
-		log_write(_ycc_gout, LOG_NOTICE, (fmt), ## __VA_ARGS__)
-#define OUT_WARN(fmt, ...)		\
-		log_write(_ycc_gout, LOG_WARNING, (fmt), ## __VA_ARGS__)
-#define OUT_ERR(fmt, ...)		\
-		log_write(_ycc_gout, LOG_ERR, (fmt), ## __VA_ARGS__)
-#define OUT_CRIT(fmt, ...)		\
-		log_write(_ycc_gout, LOG_CRIT, (fmt), ## __VA_ARGS__)
-#define OUT_ALERT(fmt, ...)		\
-		log_write(_ycc_gout, LOG_ALERT, (fmt), ## __VA_ARGS__)
-#define OUT_EMERG(fmt, ...)		\
-		log_write(_ycc_gout, LOG_EMERG, (fmt), ## __VA_ARGS__)
+#define pr_set(console, level)		\
+		log_set(_ycc_pr, (console), (level))
+#define pr_get(pconsole, plevel)		\
+		log_get(_ycc_pr, (pconsole), (plevel))
+#define pr_debug(fmt, ...)		\
+		log_write(_ycc_pr, LOG_DEBUG, (fmt), ## __VA_ARGS__)
+#define pr_info(fmt, ...)		\
+		log_write(_ycc_pr, LOG_INFO, (fmt), ## __VA_ARGS__)
+#define pr_notice(fmt, ...)		\
+		log_write(_ycc_pr, LOG_NOTICE, (fmt), ## __VA_ARGS__)
+#define pr_warn(fmt, ...)		\
+		log_write(_ycc_pr, LOG_WARNING, (fmt), ## __VA_ARGS__)
+#define pr_err(fmt, ...)		\
+		log_write(_ycc_pr, LOG_ERR, (fmt), ## __VA_ARGS__)
+#define pr_crit(fmt, ...)		\
+		log_write(_ycc_pr, LOG_CRIT, (fmt), ## __VA_ARGS__)
+#define pr_alert(fmt, ...)		\
+		log_write(_ycc_pr, LOG_ALERT, (fmt), ## __VA_ARGS__)
+#define pr_emerge(fmt, ...)		\
+		log_write(_ycc_pr, LOG_EMERG, (fmt), ## __VA_ARGS__)
 
 /* Do you really need multi logs in an application ? over-design? */
 struct log_info;
@@ -114,39 +113,16 @@ struct log_info *log_open(const char *path, int console, int level);
 int log_set(struct log_info *log, int console, unsigned int level);
 int log_get(const struct log_info *log, int *console, unsigned int *level);
 int log_vwrite(struct log_info *log, int level, const char *fmt, va_list ap);
-static inline int
-log_write(struct log_info *log, int level, const char *fmt, ...)
-{
-	int i;
-	va_list ap;
-
-	va_start(ap, fmt);
-	i = log_vwrite(log, level, fmt, ap);
-	va_end(ap);
-
-	return i;
-}
+int __printf(3, 4)
+log_write(struct log_info *log, int level, const char *fmt, ...);
 int log_flush(const struct log_info *log);
 int log_close(struct log_info *log);
 
 /* do not try to change the variable */
 extern struct log_info *_ycc_glog;
-extern struct log_info *_ycc_gout;
-static inline int _log_open_glog(const char *path, int console, int level)
-{
-	if (_ycc_glog)
-		log_close(_ycc_glog);
-	_ycc_glog = log_open(path, console, level);
-	if (_ycc_glog)
-		return 0;
-
-	return -1;
-}
-
-/* you really need multi logs in an application ? */
+extern struct log_info *_ycc_pr;
+int _log_open_glog(const char *path, int console, int level);
 
 __END_DECLS
 
-#endif /* __YCC_COMMON_LOG_H_ */
-
-/* eof */
+#endif

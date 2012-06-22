@@ -51,8 +51,7 @@ void test_debug()
 		exit(1);
 	}
 
-	DBG_PRINTF("debug print");
-	OUT_PRINTF("success");
+	DBG_PR("debug print\n");
 }
 
 void test_ndebug()
@@ -72,22 +71,11 @@ void test_ndebug()
 		exit(1);
 	}
 
-	DBG_PRINTF("debug print");
-	OUT_PRINTF("success");
+	DBG_PR("debug print\n");
 }
 
 int main()
 {
-	bool bstamp = get_dbgstamp();
-	set_dbgstamp(!bstamp);
-	if ((bstamp && get_dbgstamp()) ||
-	    (!bstamp && !get_dbgstamp())) {
-		fprintf(stderr,
-			"set_dbgstamp()/get_dbgstamp()failed: %s %s %d\n",
-			__FILE__, __func__, __LINE__);
-		exit(1);
-	}
-	set_dbgstamp(true);
 #ifdef NDEBUG
 	test_ndebug();
 #else

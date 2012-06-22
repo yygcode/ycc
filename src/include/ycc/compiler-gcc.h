@@ -27,7 +27,7 @@
 #define __always_inline		inline __attribute__((__always_inline__))
 #endif
 
-#define __printf(a, b)		__attribute__((__format(printf, a, b)))
-#define __scanf(a, b)		__attribute__((__format(scanf, a, b)))
+#define __printf(a, b)		__attribute__((__format__(printf, a, b)))
+#define __scanf(a, b)		__attribute__((__format__(scanf, a, b)))
 
-#endif /* __YCC_CONFIG_GCC_H_ */
+#endif
