@@ -179,7 +179,7 @@ static bool __avl_isvalid(struct avl_node *root)
 
 	if (!root->left && !root->right) {
 		if (droot != 1) {
-			DBG_PRINTF("droot = %u\n", droot);
+			DBG_PR("droot = %zu\n", droot);
 			return false;
 		}
 		return true;
@@ -188,7 +188,7 @@ static bool __avl_isvalid(struct avl_node *root)
 	if (!root->left) {
 		dright = root->right->depth;
 		if (dright != 1 || droot != 2) {
-			DBG_PRINTF("droot = %u, dright = %u\n", droot, dright);
+			DBG_PR("droot = %zu, dright = %zu\n", droot, dright);
 			return false;
 		}
 
@@ -198,7 +198,7 @@ static bool __avl_isvalid(struct avl_node *root)
 	if (!root->right) {
 		dleft = root->left->depth;
 		if (dleft != 1 || droot != 2) {
-			DBG_PRINTF("droot = %u, dleft = %u\n", dleft, dleft);
+			DBG_PR("droot = %zu, dleft = %zu\n", dleft, dleft);
 			return false;
 		}
 
@@ -214,12 +214,12 @@ static bool __avl_isvalid(struct avl_node *root)
 		dmax = dright;
 
 	if (dmax - dleft > 1 || dmax - dright > 1) {
-		DBG_PRINTF("dleft = %u, dright = %u\n", dleft, dright);
+		DBG_PR("dleft = %zu, dright = %zu\n", dleft, dright);
 		return false;
 	}
 
 	if (droot != dmax + 1) {
-		DBG_PRINTF("droot = %u, dleft = %u, dright = %u\n",
+		DBG_PR("droot = %zu, dleft = %zu, dright = %zu\n",
 			droot, dleft, dright);
 		return false;
 	}

@@ -31,24 +31,24 @@ int main()
 	char pathname_dest[PATH_MAX], *p;
 
 	if (!pathname_tmp(pathname, pathname_dest, PATH_MAX)) {
-		OUT_ERR("pathname_tmp %s failed", pathname);
+		pr_err("pathname_tmp %s failed", pathname);
 		return 1;
 	}
-	OUT_DEBUG("pathname_tmp: %s, %s", pathname, pathname_dest);
+	pr_debug("pathname_tmp: %s, %s", pathname, pathname_dest);
 
 	pathname = "/";
 	if (!pathname_tmp(pathname, pathname_dest, PATH_MAX)) {
-		OUT_ERR("pathname_tmp %s failed", pathname);
+		pr_err("pathname_tmp %s failed", pathname);
 		return 1;
 	}
-	OUT_DEBUG("pathname_tmp: %s, %s", pathname, pathname_dest);
+	pr_debug("pathname_tmp: %s, %s", pathname, pathname_dest);
 
 	pathname = "/etc/init.d/";
 	if (!(p = pathname_tmp(pathname, NULL, -1))) {
-		OUT_ERR("pathname_tmp %s failed", pathname);
+		pr_err("pathname_tmp %s failed", pathname);
 		return 1;
 	}
-	OUT_DEBUG("pathname_tmp: %s, %s", pathname, p);
+	pr_debug("pathname_tmp: %s, %s", pathname, p);
 
 	return 0;
 }

@@ -109,7 +109,7 @@ char *strbm_find(const char *haystack, const char *needle,
 			j = table_sgs[i];
 		else
 			j = table_ebc[(u_char)haystack[n1]];
-		DBG_PRINTF("jump offset = %zu, h,n = %zu, %zu", j, h, n);
+		DBG_PR("jump offset = %zu, h,n = %zu, %zu", j, h, n);
 		h -= j;
 		haystack += j;
 	}

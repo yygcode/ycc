@@ -1,5 +1,5 @@
 /*
- * config-ycc.h: project config header file
+ * config-ycc.h - project config header file
  *
  * Copyright (C) 2012-2013 yanyg (yygcode@gmail.com, cppgp@qq.com)
  *
@@ -22,7 +22,7 @@
 #define __YCC_CONFIG_YCC_H_
 
 #ifdef __GNUC__
-#include <ycc/config-gcc.h>
+#include <ycc/compiler.h>
 #endif
 
 #ifndef __aligned

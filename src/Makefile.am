@@ -1,4 +1,4 @@
-SUBDIRS = common algos net . tests
+SUBDIRS = common algos net . tests tools
 
 lib_LTLIBRARIES = libycc.la
 libycc_la_SOURCES =

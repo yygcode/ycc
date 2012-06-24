@@ -1,5 +1,5 @@
 /*
- * mkdir-p.c  -- create directory recursively
+ * raidx-tree.c -- Radix Tree
  *
  * Copyright (C) 2012-2013 yanyg (yygcode@gmail.com, cppgp@qq.com)
  *
@@ -18,42 +18,17 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include <assert.h>
-#include <limits.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+#include <ycc/algos/radix-tree.h>
 
-#include <config-os.h>
+struct raidx_tree_node {
+	size_t height;	/* height from the root */
+	size_t count;
+	struct radix_tree_node *parent;
+};
 
-#include <ycc/common/unistd.h>
-#include <ycc/common/log.h>
-
-/* create directory recursively */
-int mkdir_p(const char *path)
+ssize_t raidx_tree_insert(struct radix_tree_root *root,
+			  size_t index, void *item)
 {
-	int n;
-	char buf[PATH_MAX], *p = buf;
-
-	assert(path);
-
-	if ((n = strlen(path)) >= PATH_MAX) {
-		pr_err("path %s over length: %d %d\n", path, n, PATH_MAX);
-		return -1;
-	}
-
-	strcpy(buf, path);
-	while ((p = strchr(p+1, '/'))) {
-		struct stat sb;
-		*p = '\0';
-		if (stat(buf, &sb) && mkdir(buf, ACCESSPERMS)) {
-			pr_err("stat/create '%s' failed", buf);
-			return -1;
-		}
-		*p = '/';
-	}
-
-	return n;
+	struct radix_tree_node *node, *slot;
+	size_t height, shift;
 }
-
-/* eof */

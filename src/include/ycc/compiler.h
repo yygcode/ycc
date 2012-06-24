@@ -1,5 +1,5 @@
 /*
- * mkdir-p.c  -- create directory recursively
+ * compiler.h: compiler options
  *
  * Copyright (C) 2012-2013 yanyg (yygcode@gmail.com, cppgp@qq.com)
  *
@@ -18,42 +18,27 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include <assert.h>
-#include <limits.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+#ifndef __YCC_COMPILER_H_
+#define __YCC_COMPILER_H_	1
 
-#include <config-os.h>
+#ifdef __GNUC__
+#include <ycc/compiler-gcc.h>
+#endif
 
-#include <ycc/common/unistd.h>
-#include <ycc/common/log.h>
+#ifndef __aligned
+#define __aligned(x)
+#endif
 
-/* create directory recursively */
-int mkdir_p(const char *path)
-{
-	int n;
-	char buf[PATH_MAX], *p = buf;
+#ifndef __always_inline
+#define __always_inline		static
+#endif
 
-	assert(path);
+#ifndef __printf
+#define __printf(a, b)
+#endif
 
-	if ((n = strlen(path)) >= PATH_MAX) {
-		pr_err("path %s over length: %d %d\n", path, n, PATH_MAX);
-		return -1;
-	}
+#ifndef __scanf
+#define __scanf(a, b)
+#endif
 
-	strcpy(buf, path);
-	while ((p = strchr(p+1, '/'))) {
-		struct stat sb;
-		*p = '\0';
-		if (stat(buf, &sb) && mkdir(buf, ACCESSPERMS)) {
-			pr_err("stat/create '%s' failed", buf);
-			return -1;
-		}
-		*p = '/';
-	}
-
-	return n;
-}
-
-/* eof */
+#endif
