@@ -57,15 +57,14 @@ void slist_sort(void *priv, struct slist_head *head,
 
 		do {
 			size_t n1, n2;
-			struct slist_head *beg2, *end1, *end2;
+			struct slist_head *beg2, *dummy;
 
-			for (n1 = 1, end1 = beg1;
-			     n1 < msize && end1->next != head;
-			     ++n1, end1 = end1->next);
-			beg2 = end2 = end1->next;
-			for (n2 = 0;
-			     n2 < msize && end2 != head;
-			     ++n2, end2 = end2->next);
+			for (n1 = 1, beg2 = beg1->next;
+			     n1 < msize && beg2 != head;
+			     ++n1, beg2 = beg2->next);
+			for (n2 = 0, dummy = beg2;
+			     n2 < msize && dummy != head;
+			     ++n2, dummy = dummy->next);
 
 			while (n1 && n2) {
 				if (cmp(priv, beg1, beg2) <= 0) {
@@ -80,10 +79,18 @@ void slist_sort(void *priv, struct slist_head *head,
 				pos = pos->next;
 			}
 
-			if (n1) pos = end1;
-			else pos = end2;
+			if (n1) {
+				pos->next = beg1;
+				while (--n1) beg1 = beg1->next;
+				pos = beg1;
+			} else {
+				pos->next = beg2;
+				while (--n2) beg2 = beg2->next;
+				pos = beg2;
+				beg2 = beg2->next;
+			}
 			pos->next = head;
-			beg1 = end2->next;
+			beg1 = beg2;
 			++mloop;
 		} while (beg1 != head);
 		msize <<= 1;	/* msize x2 */
