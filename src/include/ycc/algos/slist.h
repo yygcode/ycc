@@ -83,6 +83,11 @@ static inline void __slist_add_prev(struct slist_head *new,
 	     &pos->member != (head);					\
 	     pos = slist_entry(pos->member.next, typeof(*pos), member))
 
+#define slist_for_each_entry_safe(pos, n, head, member)			\
+	for (pos = slist_entry((head)->next, typeof(*pos), member),	\
+	     n = slist_entry(pos->member.next, typeof(*pos), member);	\
+	     &pos->member != (head);					\
+	     pos = n, n = slist_entry(n->member.next, typeof(*n), member))
 void slist_reverse(struct slist_head *head);
 void slist_sort(void *priv, struct slist_head *head,
 		int (*cmp)(void *priv, struct slist_head *a,
