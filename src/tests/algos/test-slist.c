@@ -46,7 +46,6 @@ void do_test(unsigned int c)
 	slist_for_each_entry(p, &head, slist) printf("%d ", p->data);
 	printf("\n");
 
-	srand(time(NULL));
 	slist_for_each_entry(p, &head, slist) p->data = (size_t)rand()%100;
 	printf("before sort: ");
 	slist_for_each_entry(p, &head, slist) printf("%d ", p->data);
@@ -61,6 +60,7 @@ void do_test(unsigned int c)
 int main()
 {
 	unsigned int i;
+	srand(time(NULL));
 	for (i = 1; i < 10; ++i) {
 		printf("--------------------------\n");
 		do_test(i);
