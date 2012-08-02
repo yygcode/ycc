@@ -20,24 +20,36 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
 #include <stdlib.h>
 #include <locale.h>
 #include <libintl.h>
+#include <getopt.h>
+
+#include <config-os.h>
 
 static struct option const longopts[] = {
 	{"ip", required_argument, NULL, 'i'},
 	{"port", required_argument, NULL, 'p'},
 	{"verbose", optional_argument, NULL, 'v'},
-	{"quiet", no_argument, 'q'},
+	{"quiet", no_argument, NULL, 'q'},
 	{NULL, 0, NULL, 0},
 };
 #define optstring "i:p:v::q"
 
+static void usage(int i)
+{
+	printf("err !\n");
+	exit(i);
+}
+
 int main(int argc, char **argv)
 {
 	int c;
-	u8_t verbose = 2;
-	u16_t port;
+	int verbose = 2;
+	uint16_t port = 0;
 	const char *ip = "";
 
 	setlocale(LC_ALL, "");
@@ -50,11 +62,11 @@ int main(int argc, char **argv)
 			break;
 
 		case 'p':
-			port = (u16_t)atoi(optarg);
+			port = (uint16_t)atoi(optarg);
 			break;
 
 		case 'v':
-			verbose = optarg ? (u8_t)atoi(optarg) : (verbose + 1);
+			verbose = optarg ? atoi(optarg) : (verbose + 1);
 			break;
 
 		case 'q':
