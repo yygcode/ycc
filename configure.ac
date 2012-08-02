@@ -61,5 +61,6 @@ AC_CONFIG_FILES([
                  src/tools/Makefile
                  src/tools/common/Makefile
                  src/tools/algos/Makefile
+                 src/webchat/Makefile
 		 ])
 AC_OUTPUT
