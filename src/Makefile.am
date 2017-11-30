@@ -1,4 +1,4 @@
-SUBDIRS = common algos net . tests tools
+SUBDIRS = common algos net . tests tools webchat
 
 lib_LTLIBRARIES = libycc.la
 libycc_la_SOURCES =
