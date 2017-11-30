@@ -82,7 +82,7 @@ void rb_insert_rebalance(struct rb_node *node, struct rb_root *rb)
 	rb_set_black(*proot);
 }
 
-static inline void
+static __always_inline void
 __rb_erase_rebalance(struct rb_node *node,
 		     struct rb_node *parent,
 		     struct rb_node **proot)
