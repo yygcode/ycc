@@ -32,6 +32,15 @@
 
 __BEGIN_DECLS
 
+#ifndef __ASSERT_VOID_CAST
+#warning "could not find __ASSERT_VOID_CAST. Maybe under cygwin ?"
+#if defined __cplusplus && __GNUC_PREREQ (2,95)
+# define __ASSERT_VOID_CAST static_cast<void>
+#else
+# define __ASSERT_VOID_CAST (void)
+#endif
+#endif
+
 #ifdef NDEBUG
 /* NDEBUG: turn off */
 #define DBG_INSERT(...)		__ASSERT_VOID_CAST(0)

@@ -8,7 +8,10 @@ AC_INIT([ycc],
 	[ycc],
 	[http://yygcode.blog.com])
 AC_CONFIG_AUX_DIR([build-aux])
-AM_INIT_AUTOMAKE([-Wall -Werror gnu])
+# FIXME: cygwin/mingw complain warning like as
+#        linking libtool libraries using a non-POSIX
+# AM_INIT_AUTOMAKE([-Wall -Werror gnu])
+AM_INIT_AUTOMAKE([-Wall gnu])
 LT_INIT
 
 AC_CONFIG_SRCDIR([ChangeLog])

@@ -1,4 +1,6 @@
-SUBDIRS = common algos net . tests tools webchat
+# FIXME: cygwin no libintl_setlocale which is used by webchat, ignore now
+#SUBDIRS = common algos net . tests tools webchat
+SUBDIRS = common algos net . tests tools
 
 lib_LTLIBRARIES = libycc.la
 libycc_la_SOURCES =
