@@ -9,6 +9,10 @@ AC_INIT([ycc],
 	[http://yygcode.blog.com])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror gnu])
+# Checks for programs.
+AC_PROG_CC
+AM_PROG_AR
+
 LT_INIT
 
 AC_CONFIG_SRCDIR([ChangeLog])
@@ -18,9 +22,6 @@ AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
-
-# Checks for programs.
-AC_PROG_CC
 
 # Checks for libraries.
 
