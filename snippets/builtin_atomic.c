@@ -5,6 +5,8 @@ int v;
 
 void spin_lock(int *lock)
 {
+    __atomic_thread_fence(__ATOMIC_SEQ_CST);
+
     while (!__sync_bool_compare_and_swap(&v, 0, 1));
 }
 
